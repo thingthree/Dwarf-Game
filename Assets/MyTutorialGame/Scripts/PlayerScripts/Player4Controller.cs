@@ -21,8 +21,7 @@ public class Player4Controller : MonoBehaviour
     public GameObject[] damageBox;
     public GameObject[] genericInteractionBox;
 
-
-    private int playerCycle = 1;
+    public bool canMove = true;
     private int moveCount = 0;
     private int recentDirectionChange = 0;
     int facingHorizontal = 0;
@@ -55,27 +54,29 @@ public class Player4Controller : MonoBehaviour
 
     private void Update()
     {
-        int direction = player4.Facing;
-        // cycles through players using the R and L keys
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-            playerCycle--;
-        if (playerCycle == 4)
-            Player4Manual();
-        animator.SetInteger("Direction", direction);
-        if (player4.Facing == 2)
-            spriteRenderer.flipX = true;
+        if (GameManager.inMenu == true || canMove == false)
+            return;
         else
-            spriteRenderer.flipX = false;
-        player4.XPos = gameObject.transform.position.x;
-        player4.YPos = gameObject.transform.position.y;
-        player4.Active = true;
-        player4Serial.xPos = player4.XPos;
-        player4Serial.yPos = player4.YPos;
-        player4Serial.facing = player4.Facing;
-        player4Serial.active = player4.Active;
-        //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        {
+            
+            // cycles through players using the R and L keys
+            
+            if (GameManager.playerCycle == 4)
+                Player4Manual();
+            animator.SetInteger("Direction", player4.Facing);
+            if (player4.Facing == 2)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            player4.XPos = gameObject.transform.position.x;
+            player4.YPos = gameObject.transform.position.y;
+            player4.Active = true;
+            player4Serial.xPos = player4.XPos;
+            player4Serial.yPos = player4.YPos;
+            player4Serial.facing = player4.Facing;
+            player4Serial.active = player4.Active;
+            //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        }
     }
 
     private void Player4Auto()

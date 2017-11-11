@@ -21,8 +21,7 @@ public class Player3Controller : MonoBehaviour
     public GameObject[] damageBox;
     public GameObject[] genericInteractionBox;
 
-
-    private int playerCycle = 1;
+    public bool canMove = true;
     private int moveCount = 0;
     private int recentDirectionChange = 0;
     int facingHorizontal = 0;
@@ -55,27 +54,29 @@ public class Player3Controller : MonoBehaviour
 
     private void Update()
     {
-        int direction = player3.Facing;
-        // cycles through players using the R and L keys
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-            playerCycle--;
-        if (playerCycle == 3)
-            Player3Manual();
-        animator.SetInteger("Direction", direction);
-        if (player3.Facing == 2)
-            spriteRenderer.flipX = true;
+        if (GameManager.inMenu == true || canMove == false)
+            return;
         else
-            spriteRenderer.flipX = false;
-        player3.XPos = gameObject.transform.position.x;
-        player3.YPos = gameObject.transform.position.y;
-        player3.Active = true;
-        player3Serial.xPos = player3.XPos;
-        player3Serial.yPos = player3.YPos;
-        player3Serial.facing = player3.Facing;
-        player3Serial.active = player3.Active;
-        //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        {
+            int direction = player3.Facing;
+            // cycles through players using the R and L keys
+            
+            if (GameManager.playerCycle == 3)
+                Player3Manual();
+            animator.SetInteger("Direction", player3.Facing);
+            if (player3.Facing == 2)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            player3.XPos = gameObject.transform.position.x;
+            player3.YPos = gameObject.transform.position.y;
+            player3.Active = true;
+            player3Serial.xPos = player3.XPos;
+            player3Serial.yPos = player3.YPos;
+            player3Serial.facing = player3.Facing;
+            player3Serial.active = player3.Active;
+            //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        }
     }
 
     private void Player3Auto()

@@ -1,0 +1,11 @@
+mapset 0			
+mapset 1					
+menuset 0
+player 0
+player 1
+player 2
+player 3
+player 4
+player 5
+player 6
+player 7

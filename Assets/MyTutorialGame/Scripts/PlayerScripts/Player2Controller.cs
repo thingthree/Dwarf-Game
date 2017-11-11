@@ -21,8 +21,7 @@ public class Player2Controller : MonoBehaviour
     public GameObject[] damageBox;
     public GameObject[] genericInteractionBox;
 
-
-    private int playerCycle = 1;
+    public bool canMove = true;
     private int moveCount = 0;
     private int recentDirectionChange = 0;
     int facingHorizontal = 0;
@@ -56,27 +55,27 @@ public class Player2Controller : MonoBehaviour
 
     private void Update()
     {
-        int direction = player2.Facing;
-        // cycles through players using the R and L keys
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-            playerCycle--;
-        if (playerCycle == 2)
-            Player2Manual();
-        animator.SetInteger("Direction", direction);
-        if (player2.Facing == 2)
-            spriteRenderer.flipX = true;
+        if (GameManager.inMenu == true || canMove == false)
+            return;
         else
-            spriteRenderer.flipX = false;
-        player2.XPos = gameObject.transform.position.x;
-        player2.YPos = gameObject.transform.position.y;
-        player2.Active = true;
-        player2Serial.xPos = player2.XPos;
-        player2Serial.yPos = player2.YPos;
-        player2Serial.facing = player2.Facing;
-        player2Serial.active = player2.Active;
-        //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        {
+            
+            if (GameManager.playerCycle == 2)
+                Player2Manual();
+            animator.SetInteger("Direction", player2.Facing);
+            if (player2.Facing == 2)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            player2.XPos = gameObject.transform.position.x;
+            player2.YPos = gameObject.transform.position.y;
+            player2.Active = true;
+            player2Serial.xPos = player2.XPos;
+            player2Serial.yPos = player2.YPos;
+            player2Serial.facing = player2.Facing;
+            player2Serial.active = player2.Active;
+            //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        }
     }
 
     private void Player2Auto()

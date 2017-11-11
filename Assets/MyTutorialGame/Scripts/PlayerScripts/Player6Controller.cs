@@ -21,8 +21,7 @@ public class Player6Controller : MonoBehaviour
     public GameObject[] damageBox;
     public GameObject[] genericInteractionBox;
 
-
-    private int playerCycle = 1;
+    public bool canMove = true;
     private int moveCount = 0;
     private int recentDirectionChange = 0;
     int facingHorizontal = 0;
@@ -55,27 +54,27 @@ public class Player6Controller : MonoBehaviour
 
     private void Update()
     {
-        int direction = player6.Facing;
-        // cycles through players using the R and L keys
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-            playerCycle--;
-        if (playerCycle == 6)
-            Player6Manual();
-        animator.SetInteger("Direction", direction);
-        if (player6.Facing == 2)
-            spriteRenderer.flipX = true;
+        if (GameManager.inMenu == true || canMove == false)
+            return;
         else
-            spriteRenderer.flipX = false;
-        player6.XPos = gameObject.transform.position.x;
-        player6.YPos = gameObject.transform.position.y;
-        player6.Active = true;
-        player6Serial.xPos = player6.XPos;
-        player6Serial.yPos = player6.YPos;
-        player6Serial.facing = player6.Facing;
-        player6Serial.active = player6.Active;
-        //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        {
+           
+            if (GameManager.playerCycle == 6)
+                Player6Manual();
+            animator.SetInteger("Direction", player6.Facing);
+            if (player6.Facing == 2)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            player6.XPos = gameObject.transform.position.x;
+            player6.YPos = gameObject.transform.position.y;
+            player6.Active = true;
+            player6Serial.xPos = player6.XPos;
+            player6Serial.yPos = player6.YPos;
+            player6Serial.facing = player6.Facing;
+            player6Serial.active = player6.Active;
+            //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        }
     }
 
     private void Player6Auto()

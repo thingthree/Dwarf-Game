@@ -21,8 +21,7 @@ public class Player5Controller : MonoBehaviour
     public GameObject[] damageBox;
     public GameObject[] genericInteractionBox;
 
-
-    private int playerCycle = 1;
+    public bool canMove = true;
     private int moveCount = 0;
     private int recentDirectionChange = 0;
     int facingHorizontal = 0;
@@ -55,27 +54,27 @@ public class Player5Controller : MonoBehaviour
 
     private void Update()
     {
-        int direction = player5.Facing;
-        // cycles through players using the R and L keys
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-            playerCycle--;
-        if (playerCycle == 5)
-            Player5Manual();
-        animator.SetInteger("Direction", direction);
-        if (player5.Facing == 2)
-            spriteRenderer.flipX = true;
+        if (GameManager.inMenu == true || canMove == false)
+            return;
         else
-            spriteRenderer.flipX = false;
-        player5.XPos = gameObject.transform.position.x;
-        player5.YPos = gameObject.transform.position.y;
-        player5.Active = true;
-        player5Serial.xPos = player5.XPos;
-        player5Serial.yPos = player5.YPos;
-        player5Serial.facing = player5.Facing;
-        player5Serial.active = player5.Active;
-        //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        {
+            
+            if (GameManager.playerCycle == 5)
+                Player5Manual();
+            animator.SetInteger("Direction", player5.Facing);
+            if (player5.Facing == 2)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            player5.XPos = gameObject.transform.position.x;
+            player5.YPos = gameObject.transform.position.y;
+            player5.Active = true;
+            player5Serial.xPos = player5.XPos;
+            player5Serial.yPos = player5.YPos;
+            player5Serial.facing = player5.Facing;
+            player5Serial.active = player5.Active;
+            //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        }
     }
 
     private void Player5Auto()

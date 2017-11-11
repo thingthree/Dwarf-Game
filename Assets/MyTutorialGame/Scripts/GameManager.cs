@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance = null;
     public static BoardManager boardScript;
     public static bool loadedGame = false;  // set me to true manually to use BoardController to create map prefabs
+    public static bool inMenu = false;
+    public static int playerCycle = 1;
 
     void Awake()
     {
@@ -39,9 +41,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // saves on get key down j
+        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
+            playerCycle++;
+        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
 
-        if (Input.GetKeyDown(KeyCode.J))
+            // saves on get key down j
+
+            if (Input.GetKeyDown(KeyCode.J))
         {
             GameState.Current.Player1Serial = Player1Controller.player1Serial;
             GameState.Current.Player2Serial = Player2Controller.player2Serial;

@@ -21,8 +21,7 @@ public class Player7Controller : MonoBehaviour
     public GameObject[] damageBox;
     public GameObject[] genericInteractionBox;
 
-
-    private int playerCycle = 1;
+    public bool canMove = true;
     private int moveCount = 0;
     private int recentDirectionChange = 0;
     int facingHorizontal = 0;
@@ -54,27 +53,29 @@ public class Player7Controller : MonoBehaviour
 
     private void Update()
     {
-        int direction = player7.Facing;
-        // cycles through players using the R and L keys
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-            playerCycle--;
-        if (playerCycle == 7)
-            Player7Manual();
-        animator.SetInteger("Direction", direction);
-        if (player7.Facing == 2)
-            spriteRenderer.flipX = true;
+        if (GameManager.inMenu == true || canMove == false)
+            return;
         else
-            spriteRenderer.flipX = false;
-        player7.XPos = gameObject.transform.position.x;
-        player7.YPos = gameObject.transform.position.y;
-        player7.Active = true;
-        player7Serial.xPos = player7.XPos;
-        player7Serial.yPos = player7.YPos;
-        player7Serial.facing = player7.Facing;
-        player7Serial.active = player7.Active;
-        //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        {
+            int direction = player7.Facing;
+            // cycles through players using the R and L keys
+           
+            if (GameManager.playerCycle == 7)
+                Player7Manual();
+            animator.SetInteger("Direction", player7.Facing);
+            if (player7.Facing == 2)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            player7.XPos = gameObject.transform.position.x;
+            player7.YPos = gameObject.transform.position.y;
+            player7.Active = true;
+            player7Serial.xPos = player7.XPos;
+            player7Serial.yPos = player7.YPos;
+            player7Serial.facing = player7.Facing;
+            player7Serial.active = player7.Active;
+            //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        }
     }
 
     private void Player7Auto()

@@ -21,8 +21,7 @@ public class Player1Controller : MonoBehaviour
     public GameObject[] damageBox;
     public GameObject[] genericInteractionBox;
 
-
-    private int playerCycle = 1;
+    public bool canMove = true;
     private int moveCount = 0;
     private int recentDirectionChange = 0;
     int facingHorizontal = 0;
@@ -53,27 +52,27 @@ public class Player1Controller : MonoBehaviour
 
     private void Update()
     {
-       
-        // cycles through players using the R and L keys
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-            playerCycle--;
-        if (playerCycle == 1)
-            Player1Manual();
-        animator.SetInteger("Direction", player1.Facing);
-        if (player1.Facing == 1)
-            spriteRenderer.flipX = true;
+        if (GameManager.inMenu == true || canMove == false)
+            return;
         else
-            spriteRenderer.flipX = false;
-        player1.XPos = gameObject.transform.position.x;
-        player1.YPos = gameObject.transform.position.y;
-        player1.Active = true;
-        player1Serial.xPos = player1.XPos;
-        player1Serial.yPos = player1.YPos;
-        player1Serial.facing = player1.Facing;
-        player1Serial.active = player1.Active;
-        //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        {
+            
+            if (GameManager.playerCycle == 1)
+                Player1Manual();
+            animator.SetInteger("Direction", player1.Facing);
+            if (player1.Facing == 1)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            player1.XPos = gameObject.transform.position.x;
+            player1.YPos = gameObject.transform.position.y;
+            player1.Active = true;
+            player1Serial.xPos = player1.XPos;
+            player1Serial.yPos = player1.YPos;
+            player1Serial.facing = player1.Facing;
+            player1Serial.active = player1.Active;
+            //Debug.Log(string.Format("Facing = {0}", facing.Facing));
+        }
     }
 
     private void Player1Auto()

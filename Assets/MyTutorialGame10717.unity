@@ -168,6 +168,7 @@ MonoBehaviour:
   - {fileID: 1031666081733012, guid: 8f059937252dd0045bb98406e24b9a77, type: 2}
   - {fileID: 1486444022922134, guid: acfcf3b38df6a694da71226bfbbba7d4, type: 2}
   - {fileID: 1761218432563686, guid: f46b95708e0bffc4998a737d30ba3ac2, type: 2}
+  - {fileID: 1847736851972820, guid: eee0776b5502a90449680dd5e733cdae, type: 2}
   mapSet:
   - {fileID: 1348889221414448, guid: 57d3f9271d8687b48b277e4aa8221edd, type: 2}
   - {fileID: 1409792866963130, guid: 03b14e2bdca760347b02f02d89a16402, type: 2}
@@ -182,6 +183,8 @@ MonoBehaviour:
   - {fileID: 1031666081733012, guid: 8f059937252dd0045bb98406e24b9a77, type: 2}
   - {fileID: 1486444022922134, guid: acfcf3b38df6a694da71226bfbbba7d4, type: 2}
   - {fileID: 1761218432563686, guid: f46b95708e0bffc4998a737d30ba3ac2, type: 2}
+  misc:
+  - {fileID: 1847736851972820, guid: eee0776b5502a90449680dd5e733cdae, type: 2}
   uiFrame:
   - {fileID: 1824959258467770, guid: 418ff13fb8a4246468f5b90c9513cbe8, type: 2}
   - {fileID: 1182944952641142, guid: b2bff4323ab04a44d815f351f00da7df, type: 2}
@@ -191,6 +194,7 @@ MonoBehaviour:
   - {fileID: 1347987181970454, guid: a382a233a643f22439e3add2b85a87b3, type: 2}
   - {fileID: 1885355661657306, guid: e81d4280cec1c05429fcc72595008392, type: 2}
   - {fileID: 1065188492251956, guid: d8b488d5fc3f35a43933e1c8c656908a, type: 2}
+  actionBox: []
   canvas: {fileID: 223372953832892992, guid: 0ff3183fac2c1b64f830f0153af8e303, type: 2}
   menuText: {fileID: 114885600049414612, guid: 0ff3183fac2c1b64f830f0153af8e303, type: 2}
   rectTransform: {fileID: 224665404225194782, guid: 0ff3183fac2c1b64f830f0153af8e303,

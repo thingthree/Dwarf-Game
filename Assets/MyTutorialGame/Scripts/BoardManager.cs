@@ -26,25 +26,42 @@ public class BoardManager : MonoBehaviour
     public GameObject[] mapSet;
     public GameObject[] menuSet;
     public GameObject[] players;
+    public GameObject[] misc;
+
     public GameObject[] uiFrame;
+    public GameObject[] actionBox;
+
     public Canvas canvas;
     public Text menuText;
     public RectTransform rectTransform;
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
-   
+
+    private int menuLogicStart;
+    private int menuLogicEnd;
+    private int menuLogicLength;
+    private int menuLogicSelection;
+    private bool makingSelection;
 
     // declaration of arrays needed to use Board Manager ID System
 
     public static string[] xOffSetString = File.ReadAllLines(@"C:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidXOffSet.txt");
-    public static int[] xOffSetInt = xOffSetString.Select(x => int.Parse(x)).ToArray();
+    public static float[] xOffSet = xOffSetString.Select(x => float.Parse(x)).ToArray();
     public static string[] yOffSetString = File.ReadAllLines(@"C:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidYOffSet.txt");
-    public static int[] yOffSetInt = yOffSetString.Select(x => int.Parse(x)).ToArray();
-    public static string[] menuStartString = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidMenuArrayStart.txt");
-    public static int[] menuStartInt = menuStartString.Select(x => int.Parse(x)).ToArray();
-    public static string[] menuEndString = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidMenuArrayEnd.txt");
-    public static int[] menuEndInt = menuEndString.Select(x => int.Parse(x)).ToArray();
-    public static string[] gameText = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\gametext.txt");
+    public static float[] yOffSet = yOffSetString.Select(x => float.Parse(x)).ToArray();
+    public static string[] textStartString = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidArrayStart.txt");
+    public static int[] textStart = textStartString.Select(x => int.Parse(x)).ToArray();
+    public static string[] textEndString = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidArrayEnd.txt");
+    public static int[] textEnd = textEndString.Select(x => int.Parse(x)).ToArray();
+    public static string[] BMIDRedirectStartString = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidRedirectStart.txt");
+    public static int[] BMIDRedirectStart = BMIDRedirectStartString.Select(x => int.Parse(x)).ToArray();
+    public static string[] BMIDRedirectEndString = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\bmidRedirectEnd.txt");
+    public static int[] BMIDRedirectEnd = BMIDRedirectEndString.Select(x => int.Parse(x)).ToArray();
+    public static string[] BMIDRedirectString = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\BMIDRedirect.txt");
+    public static int[] BMIDRedirect = BMIDRedirectString.Select(x => int.Parse(x)).ToArray();
+    public static string[] text = File.ReadAllLines(@"c:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References\gametext.txt");
+    
+    
     // initializes list on which items will be instantiated
 
     public void InitialiseList()
@@ -65,16 +82,17 @@ public class BoardManager : MonoBehaviour
     {
 
         // declaration of variables which could be used in multiple situations within the board controller
-
-        int x = xOffSetInt[bmid];
-        int y = yOffSetInt[bmid];
-        int menuStart = menuStartInt[bmid];
-        int menuEnd = menuEndInt[bmid];
+        float x = xOffSet[bmid];
+        float y = yOffSet[bmid];
+        int menuTextStart = textStart[bmid];
+        int menuTextEnd = textEnd[bmid];
+        int menuLogicStart = BMIDRedirectStart[bmid];
+        int menuLogicEnd = BMIDRedirectEnd[bmid];
         canvas.GetComponent<Canvas>();
         menuText.GetComponent<Text>();
         rectTransform.GetComponent<RectTransform>();
         canvas.worldCamera = Camera.main;
-        
+        Debug.Log(bmid);
 
         // uncomment and set GameManager.loadedGame to true to use Quick Prefab Builder
         //start uncomment for quick prefabs
@@ -165,72 +183,84 @@ public class BoardManager : MonoBehaviour
         //stop uncomment for quick prefabs
 
         if (GameManager.loadedGame == true)
-        {
-            if (bmid != 0)
-            {
-                // If bmid !=0 it's not a special case, so we're moving on with normal BoardController instantiation.
-                // The branching if statements determine if what type of prefabs we're instantiating, so we can
-                // give proper instructions to instantiate the objects correctly.
-
-                if (bmid <= BMID.Length - players.Length - 1)
+        {  
+            if (bmid <= BMID.Length - misc.Length - players.Length- 1)
+            // making a menu or map
+            {                    
+                if (bmid <= BMID.Length - misc.Length - menuSet.Length - players.Length- 1)
+                // making map
                 {
-                    if (bmid <= BMID.Length - menuSet.Length - players.Length - 1)
-                    {
-                        // do something with mapset array
-                        GameObject toInstantiate = mapSet[bmid];
-                        GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
-                        instance.transform.SetParent(boardHolder);
-                        return;
-                    }
-
-                    else
-                    {
-                        // do something with menus array
-                        // Instantiating a menu requires 4 things. The text, it's transform, the menu(if any), and its transform.
-                        // We find the text by getting the start and end value of the index in our game text array. 
-                        // We set its transform by (under construction)
-                        // We set the menu by instantiating its prefab from the BMID array.
-                        // We set its transform by adding our x and y offset array at index [bmid] to the objects transform as it's instantiated. 
-
-                       
-                        GameManager.inMenu = true;
-                        GameObject toInstantiate = Instantiate(BMID[bmid], new Vector3(Camera.main.transform.position.x + xOffSetInt[bmid], Camera.main.transform.position.y + yOffSetInt[bmid], 0f), Quaternion.identity) as GameObject;
-                        Canvas instance = Instantiate(canvas, new Vector3(0, 0, 0f), Quaternion.identity);
-                        List<string> menuTextList = new List<string>();
-                        for (int i = menuStart; i <= menuEnd; i++)
-                        {
-                            menuTextList.Add(gameText[i]);
-                        }
-                        string[] menuTextArray = menuTextList.GetRange(0, (menuEnd - menuStart + 1)).ToArray();
-                        menuText.text = MenuController("\n", menuTextArray);
-                        menuText.rectTransform.transform.Translate(xOffSetInt[bmid], yOffSetInt[bmid], 0f);
-
-
-                        // finally, we want our menu to 'do things' and react accordingly when we 'do things'
-                        // the doing things component is tracked in the game manager
-                        // the reacting accordingly occurs by calling another Boarc Controller method with a new BMID
-
-                        return;
-                    }
+                    Debug.Log("Method: BoardManager.BoardController - Creating a mapset");
+                    GameObject toInstantiate = BMID[bmid];
+                    GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    return;
                 }
 
                 else
+                // making a menu
                 {
-                    //do something with players array
+                    if (GameManager.inMenu == false)
+                    // creating new menu
+                    {
+                        Debug.Log("Method: BoardManager.BoardController - Creating a menu");
+                        GameManager.inMenu = true;
+                        makingSelection = true;
+                        GameObject toInstantiate = Instantiate(BMID[bmid], new Vector3(Camera.main.transform.position.x + xOffSet[bmid], Camera.main.transform.position.y + yOffSet[bmid], 0f), Quaternion.identity) as GameObject;
+                        Canvas instance = Instantiate(canvas, new Vector3(0, 0, 0f), Quaternion.identity);
+
+                        List<string> menuTextList = new List<string>();
+                        for (int i = menuTextStart; i <= menuTextEnd; i++)
+                        {
+                            menuTextList.Add(text[i]);
+                        }
+                        string[] menuTextArray = menuTextList.GetRange(0, (menuTextEnd - menuTextStart + 1)).ToArray();
+                        menuText.text = MenuTextController("\n", menuTextArray);
+                        menuText.rectTransform.transform.position = new Vector3(menuText.rectTransform.transform.position.x + xOffSet[bmid], menuText.transform.position.y + yOffSet[bmid], 0f);
+                        menuLogicLength = menuLogicEnd - menuLogicStart + 1;
+                        menuLogicSelection = 0;
+                        BoardController(bmid);
+                        return;
+                    }
+                    else if (GameManager.inMenu == true && makingSelection == true)
+                    // making selection
+                    {
+                        List<int> menuLogicList = new List<int>();
+
+                        for (int i = menuLogicStart; i <= menuLogicEnd; i++)
+                        {
+                            menuLogicList.Add(BMIDRedirect[i]);
+                        }
+                        int[] menuLogicArray = menuLogicList.GetRange(0, (menuLogicEnd - menuLogicStart + 1)).ToArray();
+                        Debug.Log("Method: BoardManager.BoardController - Making a Selection");
+                        StartCoroutine(MenuLogicController(makingSelection, menuLogicArray, menuLogicSelection, bmid));
+                        return;
+                    }
+
+                    else if (GameManager.inMenu == true && makingSelection == false)
+                    {
+                        GameManager.inMenu = false;
+                        BoardController(menuLogicStart + menuLogicSelection);
+                    }
                 }
-                
             }
+
+            else
+            // misc bmid
+            {
+                Debug.Log("Method: BoardManager.BoardController - Not Implemented");
+                GameObject toInstantiate = BMID[bmid];
+                GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+                instance.transform.SetParent(boardHolder);
+                return;
+            }                          
         } 
 
-        /* under construction*/
-
         else if (GameManager.loadedGame == false)
+        // new game
         {
-            // places main menu 
             GameObject toInstantiate = mapSet[bmid];
             GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
-
-            // if it's a new game, but we have a saveStates[0], aka new game save state
 
             if (File.Exists( @"C:\Users\marsh\Documents\BackGround Project\Assets\MyTutorialGame\References" + "/savedGames.gd"))
             {
@@ -244,13 +274,12 @@ public class BoardManager : MonoBehaviour
                 GameObject player5 = Instantiate(players[5], new Vector3(GameState.Current.Player5Serial.xPos, GameState.Current.Player5Serial.yPos, 0f), Quaternion.identity) as GameObject;
                 GameObject player6 = Instantiate(players[6], new Vector3(GameState.Current.Player6Serial.xPos, GameState.Current.Player6Serial.yPos, 0f), Quaternion.identity) as GameObject;
                 GameObject player7 = Instantiate(players[7], new Vector3(GameState.Current.Player7Serial.xPos, GameState.Current.Player7Serial.yPos, 0f), Quaternion.identity) as GameObject;
-                BoardController(BMID.Length-players.Length-menuSet.Length);
+                BoardController(BMID.Length-misc.Length-players.Length-menuSet.Length);
                 return;
             }
 
-            // if it's a new game, and we have no saveStates[0], aka first launch
-
             else
+            // first launch
             {
                 GameObject player1 = Instantiate(players[1], new Vector3(0, 0), Quaternion.identity) as GameObject;
                 GameObject player2 = Instantiate(players[2], new Vector3(0, 0), Quaternion.identity) as GameObject;
@@ -267,9 +296,56 @@ public class BoardManager : MonoBehaviour
         return;
     }
 
-    private string MenuController(string separator, string[] strings)
+    private IEnumerator MenuLogicController(bool wait, int[] myIntArray, int selection, int bmid)
     {
-       
+        while (wait == true)
+        {
+            
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                if (selection < myIntArray.Length - 1)
+                {
+                    selection++;
+                    Debug.Log("Coroutine: MenuLogicController - Increased Selection");
+                    Debug.Log("Coroutine: MenuLogicController - Selection = " + selection);
+                }
+                else
+                {
+                    Debug.Log("Coroutine: MenuLogicController - Array index out of range: end of array.");
+                    Debug.Log("Coroutine: MenuLogicController - Selection = " + selection);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                if (selection > 0)
+                {
+                    selection--;
+                    Debug.Log("Coroutine: MenuLogicController - Decreased Selection");
+                    Debug.Log("Coroutine: MenuLogicController - Selection = " + selection);
+                }
+                else
+                {
+                    Debug.Log("Coroutine: MenuLogicController - Array index out of range: start of array.");
+                    Debug.Log("Coroutine: MenuLogicController - Selection = " + selection);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                Debug.Log("Coroutine: MenuLogicController - Final selection = " + selection);
+                menuText.rectTransform.transform.position = new Vector3(menuText.rectTransform.transform.position.x - xOffSet[bmid], menuText.transform.position.y - yOffSet[bmid], 0f);
+                BoardController(myIntArray[selection]);
+                wait = false;
+            }
+            yield return null;
+        }
+
+        Debug.Log(menuLogicSelection);
+        Debug.Log("Coroutine: MenuLogicController - Complete");
+    }
+
+    private string MenuTextController(string separator, string[] strings)
+    {
+
         string result = "";
 
         for (int i = 0; i < strings.Length; i++)
@@ -284,10 +360,6 @@ public class BoardManager : MonoBehaviour
         return result;
 
     }
-    // if it's the first launch, we don't have a gamestate, so we have to make a default gamestate
-    // player states are set in player controllers individually
-
-        /* under construction */
 
     private GameState NewGame()
     {
@@ -311,21 +383,6 @@ public class BoardManager : MonoBehaviour
         };
         return game;
     }
-
-    /* not currently in use, but will be useful for rng prefab creation with BoardController in future
-
-    public class Count
-    {
-        public int minimum;             
-        public int maximum;             
-
-        public Count(int min, int max)
-        {
-            minimum = min;
-            maximum = max;
-        }
-    }
-    */
 }
 
 

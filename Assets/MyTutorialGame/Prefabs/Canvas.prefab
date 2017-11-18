@@ -113,7 +113,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Dwarf Game
 
@@ -157,7 +157,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1173455751102024}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33405, y: 33405, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1649.7422}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224665404225194782}
@@ -165,7 +165,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 33405, y: 33405}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224665404225194782
@@ -176,7 +176,7 @@ RectTransform:
   m_GameObject: {fileID: 1564148261525634}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.5, y: 6.5, z: 99}
-  m_LocalScale: {x: 0.030534351, y: 0.030534351, z: 0.030534351}
+  m_LocalScale: {x: 0.060009375, y: 0.060009375, z: 0.060009375}
   m_Children:
   - {fileID: 224546015948680866}
   m_Father: {fileID: 0}
@@ -185,5 +185,5 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 12.5, y: 6.5}
-  m_SizeDelta: {x: 931.55554, y: 524}
+  m_SizeDelta: {x: 474, y: 266.625}
   m_Pivot: {x: 0.5, y: 0.5}

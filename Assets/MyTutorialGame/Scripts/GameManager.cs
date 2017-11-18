@@ -41,13 +41,15 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
-            playerCycle++;
-        if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
-
-            // saves on get key down j
-
-            if (Input.GetKeyDown(KeyCode.J))
+        if (inMenu == false)
+        {
+            if ((Input.GetKeyDown(KeyCode.R)) && playerCycle < 7)
+                playerCycle++;
+            if ((Input.GetKeyDown(KeyCode.L)) && playerCycle > 1)
+                playerCycle--;
+        }
+        // saves on get key down j
+        if (Input.GetKeyDown(KeyCode.J))
         {
             GameState.Current.Player1Serial = Player1Controller.player1Serial;
             GameState.Current.Player2Serial = Player2Controller.player2Serial;
@@ -70,6 +72,11 @@ public class GameManager : MonoBehaviour
             Saves.Load();
             return;
         }
+        
+
+
     }
+
+    
 }
 
